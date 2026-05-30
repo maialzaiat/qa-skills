@@ -1,0 +1,96 @@
+---
+description: E-Shop frontend (React/Vite) patterns and conventions
+globs: eshop-frontend/**/*
+alwaysApply: false
+---
+
+# E-Shop Frontend
+
+React 19 + Vite + React Router + Axios. Plain JSX (no TypeScript). Match existing pages before introducing new patterns.
+
+## Layout
+
+```
+eshop-frontend/src/
+  services/api.js       # Axios client + domain services
+  context/AuthContext.jsx
+  components/ProtectedRoute.jsx
+  pages/<Page>.jsx + <Page>.css
+  App.jsx               # Routes + ProtectedRoute wrappers
+```
+
+## API layer
+
+- Use named services from `../services/api` — never raw `fetch` or a second Axios instance.
+- Backend base URL: `http://localhost:3000/api` (axios instance in `api.js`).
+- JWT: request interceptor reads `localStorage.token`; 401 clears tokens and redirects to `/login`.
+- **Payload shape:** read entity data from `response.data.data` (lists may use `.data.items`).
+- **Errors:** `err.response?.data?.message || 'Human-readable fallback'`.
+
+```javascript
+// ✅ Page data fetch
+const response = await cartService.get();
+setCart(response.data.data);
+
+// ✅ Error handling
+catch (err) {
+  setError(err.response?.data?.message || 'Failed to load cart');
+}
+```
+
+Services: `authService`, `productsService`, `cartService`, `checkoutService`, `ordersService`.
+
+## Auth & routing
+
+- `useAuth()` from `AuthContext` for `user`, `login`, `logout`, `updateProfile`, `isAuthenticated`, `loading`.
+- Protected screens: wrap route element in `<ProtectedRoute>` in `App.jsx`, not per-page redirects.
+- After logout: `await logout(); navigate('/login')`.
+- Post-login default: `/catalog`.
+
+## Page component pattern
+
+- Functional components; `export default` for the main page.
+- State trio: `loading`, `error`, domain data (`useState`).
+- Load in `useEffect` with an inner `async` function or a `loadX` helper called from handlers.
+- Handlers: `handleSubmit`, `handleLogout`, `handleAddToCart` — call `e.preventDefault()` on forms.
+- Import co-located styles: `import './PageName.css'`.
+- Money display: `` `$${Number(amount).toFixed(2)}` ``.
+
+```jsx
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
+
+useEffect(() => {
+  const load = async () => {
+    try {
+      const response = await ordersService.list();
+      setOrders(response.data.data || []);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to load orders');
+    } finally {
+      setLoading(false);
+    }
+  };
+  load();
+}, []);
+```
+
+## Styling
+
+- One CSS file per page; class prefix matches the feature (`catalog-`, `cart-`, `checkout-`, `ps-` for payment return).
+- Page shell: `*-page` / `*-shell`; actions: `*-btn` or `btn` + `ghost`/`primary`.
+- Reuse global form classes from auth (`form-group`, `btn btn-primary`) on profile-style pages.
+
+## Checkout / Saferpay
+
+- Card flow: `checkoutService.initiatePayment` → store token in `sessionStorage` key `saferpay.paymentToken` → `window.location.href = redirectUrl`.
+- Return routes: `/payment/success|fail|abort` via `<PaymentReturn outcome="…" />`.
+- On return: `checkoutService.confirmPayment(token)`; guard double-call with `useRef` (StrictMode-safe).
+- Clear token from sessionStorage after confirm or abort.
+
+## Conventions
+
+- Prefer `useNavigate()` for in-app navigation; full redirect only for external payment URLs.
+- Complex UIs: small subcomponents in the same file (`Loading`, `Success`) before adding new folders.
+- Named exports only for route variants (e.g. `OrdersList` alongside default `OrderDetails`).
+- Match quote style of the file you edit (project mixes `'` and `"`).
