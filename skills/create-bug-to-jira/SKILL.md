@@ -1,28 +1,26 @@
 ---
-name: log-bug-to-jira
-description: Takes a failed test case (with optional screenshot or video attachment), crafts a short descriptive Bug summary, builds a structured Jira description with Preconditions / Steps / Expected Result / Actual Result, and creates the Bug ticket via Atlassian MCP. Use when a test fails and the user wants to log it as a Jira Bug immediately.
+name: create-bug-to-jira
+description: Takes a failed test case, crafts a short descriptive Bug summary, builds a structured Jira description with Preconditions / Steps / Expected Result / Actual Result, and creates the Bug ticket via Atlassian MCP. Use when a test fails and the user wants to log it as a Jira Bug immediately.
 user-invocable: true
 ---
 
-# Log Bug to Jira from Failed Test Case
+# Create Bug to Jira from Failed Test Case
 
 ## When to use
 
 - A test case has failed and the user wants to file a Bug in Jira
 - The user pastes a failed test result, error log, or describes what went wrong
-- The user may attach a screenshot or screen-recording as evidence
 
 ## Required inputs
 
-| Input | Notes |
-|-------|-------|
+| Input            | Notes                                                       |
+| ---------------- | ----------------------------------------------------------- |
 | Failed test case | Title, steps, expected vs actual result — paste or describe |
-| Jira project key | e.g. `PROJ`, `QA`, `ESHOP` |
+| Jira project key | e.g. `PROJ`, `QA`, `ESHOP`                                  |
 
 ## Optional inputs
 
 - `cloudId` — site hostname or UUID; auto-resolved via `getAccessibleAtlassianResources` if missing
-- Attached image or video file path — uploaded to the ticket as an attachment
 - Severity / Priority override — if user specifies (e.g. Critical, High)
 - Assignee — Jira account ID or name; use `lookupJiraAccountId` to resolve
 - Linked story or parent issue key — will be linked via `createIssueLink`
@@ -38,7 +36,6 @@ Task Progress:
 - [ ] Confirm Bug issue type and required fields
 - [ ] Draft summary and description; present for approval
 - [ ] Create Bug ticket via createJiraIssue
-- [ ] Upload attachment if provided
 - [ ] Link to parent/story if requested
 - [ ] Report created ticket key and URL to user
 ```
@@ -49,10 +46,9 @@ Task Progress:
 
 Ask for anything missing before proceeding:
 
-1. If no project key is given, ask: *"Which Jira project should I log this bug under?"*
-2. If neither test steps nor error output is provided, ask: *"Can you paste the test case steps, expected result, and what actually happened?"*
-3. If the user wants to upload an attachment but has not provided a file path, ask: *"Please share the file path of the screenshot or video so I can attach it."*
-4. Do **not** ask about fields that can be inferred or are optional.
+1. If no project key is given, ask: _"Which Jira project should I log this bug under?"_
+2. If neither test steps nor error output is provided, ask: _"Can you paste the test case steps, expected result, and what actually happened?"_
+3. Do **not** ask about fields that can be inferred or are optional.
 
 ---
 
@@ -84,13 +80,15 @@ Write a **short, specific, actionable** summary following this pattern:
 ```
 
 Rules:
+
 - Maximum ~80 characters
 - Start with the module or feature name in brackets if identifiable
-- Use present tense: *"fails"*, *"returns"*, *"displays"* — not *"failed"* or *"returned"*
+- Use present tense: _"fails"_, _"returns"_, _"displays"_ — not _"failed"_ or _"returned"_
 - Include the key discriminating detail (e.g. specific input value, role, environment)
-- Do **not** start with generic words like *"Bug:"*, *"Issue:"*, *"Test:"*
+- Do **not** start with generic words like _"Bug:"_, _"Issue:"_, _"Test:"_
 
 Good examples:
+
 - `[Login] — "Forgot Password" link returns 404 for SSO users`
 - `[Cart] — Discount code applies twice when user refreshes checkout page`
 - `[API /orders] — POST returns 500 when item quantity is 0`
@@ -101,26 +99,32 @@ Use this exact template:
 
 ```markdown
 ## Preconditions
+
 - [List all setup requirements: environment, user role, data state, feature flags, etc.]
 
 ## Steps to Reproduce
+
 1. [First action — be specific, include exact values used]
 2. [Second action]
 3. [Continue until the failure occurs]
 
 ## Expected Result
+
 - [What should happen according to requirements or the test case design]
 
 ## Actual Result
+
 - [What actually happened — include error messages, status codes, or observable UI behavior verbatim]
 
 ## Test Evidence
+
 - Test case: [Name or ID of the failed test case if available]
 - Environment: [e.g. Staging, Production, Local — state if unknown]
 - Build / Version: [if available]
-- Attachment: [Screenshot / video uploaded — or "None"]
+- Attachment: None
 
 ## Additional Context
+
 [Any logs, stack traces, or relevant notes. Remove section if empty.]
 ```
 
@@ -130,7 +134,7 @@ Fill every section from the user's input. If a section is genuinely unknown, wri
 
 Show the complete Summary and Description to the user before creating anything. Ask:
 
-> *"Does this look correct? Should I create the bug in Jira?"*
+> _"Does this look correct? Should I create the bug in Jira?"_
 
 Do not create the ticket until the user explicitly confirms.
 
@@ -162,32 +166,11 @@ Capture the returned issue key (e.g. `BUG-42`) and URL.
 
 ---
 
-### 6. Upload attachment (if provided)
-
-If the user supplied a screenshot or video file:
-
-1. Use `mcp_com_atlassian_fetch` to call the Jira attachment endpoint:
-
-   ```
-   POST https://<site>.atlassian.net/rest/api/3/issue/<issueKey>/attachments
-   Header: X-Atlassian-Token: no-check
-   Content-Type: multipart/form-data
-   Body: file = <binary content of the file>
-   ```
-
-2. Confirm the attachment was accepted (HTTP 200 / 201).
-3. If the upload fails, tell the user the attachment could not be added automatically and provide the manual steps:
-   - Open the ticket URL
-   - Click **Attach** (paperclip icon)
-   - Drag and drop the file
-
----
-
-### 7. Link to parent issue (optional)
+### 6. Link to parent issue (optional)
 
 If the user provides a related story, epic, or parent key:
 
-1. Call `getIssueLinkTypes` to find the appropriate link type (prefer *"is caused by"* or *"relates to"*).
+1. Call `getIssueLinkTypes` to find the appropriate link type (prefer _"is caused by"_ or _"relates to"_).
 2. Call `createIssueLink` linking the new Bug to the parent issue.
 
 ---
