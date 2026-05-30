@@ -16,10 +16,10 @@ For wiki-only or mixed sources without Jira, use [.github/skills/generate-test-c
 
 ## Required inputs
 
-| Input | Notes |
-|-------|--------|
+| Input            | Notes                                                           |
+| ---------------- | --------------------------------------------------------------- |
 | Story key or URL | e.g. `PROJ-123` or `https://site.atlassian.net/browse/PROJ-123` |
-| Output mode | `draft-only` (default), `jira-publish`, or `local-md-publish` |
+| Output mode      | `draft-only` (default), `jira-publish`, or `local-md-publish`   |
 
 ## Optional inputs
 
@@ -62,14 +62,16 @@ If acceptance criteria are missing, state assumptions in the draft and flag them
 
 ### 3. Ground cases in evidence (recommended)
 
-Cross-check implementation when the story maps to this repo:
+Cross-check implementation when the story maps to code in the current workspace:
 
-| Layer | Where to look |
-|-------|----------------|
-| API | [eshop-api/src/modules](eshop-api/src/modules) — controller, DTO, guard, service |
-| Endpoint truth | [eshop docs/wiki/api/implemented-endpoints.md](eshop%20docs/wiki/api/implemented-endpoints.md) |
-| Requirements | [eshop docs/wiki](eshop%20docs/wiki) module pages linked from [index.md](eshop%20docs/wiki/index.md) |
-| Drift | [.github/skills/wiki-sync-check/SKILL.md](../../.github/skills/wiki-sync-check/SKILL.md) when behavior may differ from docs |
+| Layer                 | Where to look                                                                            |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| API / backend         | Search for controller, service, DTO, and guard files related to the story's feature area |
+| Endpoints / contracts | Look for API docs, OpenAPI/Swagger files, or wiki pages in the workspace                 |
+| Requirements / wiki   | Search for module wiki pages or requirements docs linked from an index file              |
+| Drift                 | If behavior may differ from docs, flag assumptions and ask the user to verify            |
+
+> **Discovery rule:** Do not assume fixed paths. Use `file_search` or `semantic_search` to locate relevant source files based on the feature name extracted from the story summary. Ask the user if the workspace structure is unclear.
 
 Each test case must cite **requirement evidence** (Jira field or AC text) and **implementation evidence** (file path or “not implemented — story-only”).
 
@@ -77,24 +79,28 @@ Each test case must cite **requirement evidence** (Jira field or AC text) and **
 
 Produce **manual** cases and **Jira-ready** cases using this field mapping:
 
-| Jira field | Content |
-|------------|---------|
-| Summary | Short, specific title |
+| Jira field  | Content                                                     |
+| ----------- | ----------------------------------------------------------- |
+| Summary     | Short, specific title                                       |
 | Description | Sections: **Precondition**, **Steps**, **Expected results** |
 
 Description template:
 
 ```markdown
 **Precondition**
+
 - [bulleted setup]
 
 **Steps**
+
 1. [ordered, executable actions]
 
 **Expected results**
+
 - [observable outcomes]
 
 **Traceability**
+
 - Story: [KEY] — [quote or AC reference]
 - Evidence: [code path, wiki path, or PR]
 ```
@@ -122,9 +128,10 @@ Before presenting the final draft or publishing, apply [.github/skills/generate-
 
 **`jira-publish`** — After user approval:
 
-1. Confirm test case issue type and required custom fields (`getJiraProjectIssueTypesMetadata`, `getJiraIssueTypeMetaWithFields` if needed).
-2. Follow [.github/prompts/publish-test-cases-jira.prompt.md](../../.github/prompts/publish-test-cases-jira.prompt.md): dry-run preview → explicit confirmation → `createJiraIssue` per case → link to story (`createIssueLink`).
-3. Never publish without recorded user confirmation.
+1. Call `getJiraProjectIssueTypesMetadata` to find the test case issue type (e.g. "Test", "Test Case", "Story").
+2. Call `getJiraIssueTypeMetaWithFields` to get required fields. **Resolve all field IDs by name — never hardcode `customfield_*` IDs.**
+3. Dry-run preview of all cases → ask for explicit confirmation → call `createJiraIssue` per case → link each to the story via `createIssueLink`.
+4. Never publish without recorded user confirmation.
 
 ## Response format
 
@@ -144,6 +151,4 @@ Return to the user:
 
 ## References
 
-- Broader generation (wiki + PR): [.github/skills/generate-test-cases/SKILL.md](../../.github/skills/generate-test-cases/SKILL.md)
-- Publish workflow: [.github/prompts/publish-test-cases-jira.prompt.md](../../.github/prompts/publish-test-cases-jira.prompt.md)
-- Quality gate: [.github/skills/generate-test-cases/reference/quality-gate-checklist.md](../../.github/skills/generate-test-cases/reference/quality-gate-checklist.md)
+- If the workspace has a broader test generation skill or quality gate checklist, locate it via `file_search` for `SKILL.md` or `quality-gate*` files and apply it before presenting the final draft.
