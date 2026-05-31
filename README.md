@@ -74,11 +74,11 @@ AI specialist in SRE and Lean Six Sigma Root Cause Analysis. Mines historical RC
 
 Consolidated Cypress framework skill. Covers the full automation lifecycle — converting manual test cases, adding/updating/refactoring specs, extending page objects, managing fixtures and support commands, live-site locator extraction, email/database validation, and clean code review. Bundles four internal references and the locator extraction script.
 
-| Reference | Purpose |
-|---|---|
-| [clean-code-standards.md](skills/cypress-automation-framework/references/clean-code-standards.md) | Code quality rules and examples for specs, POMs, commands, and fixtures |
-| [framework-structure.md](skills/cypress-automation-framework/references/framework-structure.md) | Folder layout, layer ownership, and naming conventions |
-| [locator-extraction.md](skills/cypress-automation-framework/references/locator-extraction.md) | Workflow and script usage for live-site selector discovery |
+| Reference                                                                                                       | Purpose                                                                     |
+| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [clean-code-standards.md](skills/cypress-automation-framework/references/clean-code-standards.md)               | Code quality rules and examples for specs, POMs, commands, and fixtures     |
+| [framework-structure.md](skills/cypress-automation-framework/references/framework-structure.md)                 | Folder layout, layer ownership, and naming conventions                      |
+| [locator-extraction.md](skills/cypress-automation-framework/references/locator-extraction.md)                   | Workflow and script usage for live-site selector discovery                  |
 | [manual-test-case-conversion.md](skills/cypress-automation-framework/references/manual-test-case-conversion.md) | Step-by-step process for converting manual test cases to Cypress automation |
 
 **Triggers:** "Cypress test", "page object", "fixture update", "support command", "flaky E2E", "email validation", "locator extraction", "automation framework cleanup", "convert this test case", "automate these steps", "is this good code", "where should I put this".
