@@ -70,9 +70,10 @@ AI specialist in SRE and Lean Six Sigma Root Cause Analysis. Mines historical RC
 
 ### `cypress-automation-framework`
 
-**File:** [skills/cypress-automation-framework/SKILL.md](skills/cypress-automation-framework/SKILL.md)
+**File:** [skills/cypress-automation-framework/SKILL.md](skills/cypress-automation-framework/SKILL.md)  
+**Usage Guide:** [skills/cypress-automation-framework/README.md](skills/cypress-automation-framework/README.md)
 
-Consolidated Cypress framework skill. Covers the full automation lifecycle — converting manual test cases, adding/updating/refactoring specs, extending page objects, managing fixtures and support commands, live-site locator extraction, email/database validation, and clean code review. Bundles four internal references and the locator extraction script.
+Consolidated Cypress framework skill. Covers the full automation lifecycle — converting manual test cases, adding/updating/refactoring specs, extending page objects, managing fixtures and support commands, live-site locator extraction, email/database validation, and clean code review. Bundles four internal references and the locator extraction script. See the README for quick-start examples, layer ownership rules, and validation commands.
 
 | Reference                                                                                                       | Purpose                                                                     |
 | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
