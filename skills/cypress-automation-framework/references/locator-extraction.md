@@ -1,8 +1,3 @@
----
-name: cypress-locator-extraction
-description: "Locator extraction workflow and script usage for the Cypress automation framework. Use this skill whenever discovering, extracting, or validating CSS selectors or locators from a live website for use in Cypress tests. Trigger on requests like 'find selectors for this page', 'extract locators', 'what selector should I use', 'inspect this site', 'run the locator script', or any time live-site element discovery is needed before writing automation."
----
-
 # Locator Extraction Workflow And Script Usage
 
 ## Locator Extraction Procedure

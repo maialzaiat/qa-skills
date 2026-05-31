@@ -1,8 +1,3 @@
----
-name: cypress-manual-test-conversion
-description: "Manual test case conversion workflow for the Cypress automation framework. Use this skill whenever converting manual test cases, QA checklists, business scenarios, or step-by-step test documents into automated Cypress specs. Trigger on requests like 'convert this test case', 'automate these steps', 'turn this into a Cypress test', 'here are my manual test steps', or any time a human-written test scenario needs to become automation code."
----
-
 # Manual Test Case Conversion
 
 ## When To Load This Reference
@@ -41,24 +36,24 @@ Before converting a manual test case, confirm these details:
 Manual test case:
 
 ```text
-1. Open the checkout page.
+1. Open the target page.
 2. Enter a valid email address.
 3. Click continue.
-4. Verify the payment page is displayed.
+4. Verify the confirmation page is displayed.
 ```
 
 Automation shape:
 
 ```javascript
-it("navigates from checkout email step to payment for a valid user", () => {
-  const checkoutData = generateCheckoutData();
+it("navigates to the confirmation page after a valid submission", () => {
+  const formData = generateFormData();
 
-  cy.openCheckoutPage();
-  cy.fillCheckoutEmail(checkoutData.email);
-  cy.continueFromCheckout();
+  cy.openTargetPage();
+  cy.fillEmailField(formData.email);
+  cy.submitForm();
 
-  paymentPage.getPageTitle().should("be.visible");
-  cy.url().should("include", "/payment");
+  confirmationPage.getPageTitle().should("be.visible");
+  cy.url().should("include", "/confirmation");
 });
 ```
 

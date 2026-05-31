@@ -15,18 +15,14 @@ user-invocable: true
 - Modify reusable flows in support command layers such as `cypress/support/commands.js`.
 - Work on environment-aware navigation, email verification, or database-backed assertions.
 - Discover candidate Cypress-compatible locators from a live website by using the bundled [locator extraction script](./scripts/extract-cypress-locators.js).
-- Convert manual test cases into clean Cypress automation.
+- Convert manual test cases into clean Cypress automation by using the workflow in [Manual test case conversion](./references/manual-test-case-conversion.md).
 
-## Companion Skills — Load When Needed
+Use these references when the task needs deeper guidance:
 
-These are standalone skills. Load them by reading their SKILL.md when the task requires their guidance:
-
-| Task | Skill to load |
-|---|---|
-| Reviewing, writing, or refactoring Cypress code quality | `cypress-clean-code-standards` |
-| Deciding file placement, ownership, or project layout | `cypress-framework-structure` |
-| Discovering selectors from a live website | `cypress-locator-extraction` |
-| Converting manual test steps into Cypress automation | `cypress-manual-test-conversion` |
+- [Framework structure and conventions](./references/framework-structure.md)
+- [Clean code standards and examples](./references/clean-code-standards.md)
+- [Locator extraction workflow and script usage](./references/locator-extraction.md)
+- [Manual test case conversion](./references/manual-test-case-conversion.md)
 
 ## Required Input
 
@@ -43,25 +39,24 @@ Do not start locator extraction until the user provides the URL and the required
 ## Editing Procedure
 
 1. Identify the owning layer before editing: fixture, page object, support command, spec, or plugin.
-2. Load `cypress-manual-test-conversion` skill when the input starts from a manual scenario, business flow, or test steps document.
-3. Load `cypress-framework-structure` skill when you need ownership rules or expected project layout.
-4. Load `cypress-clean-code-standards` skill before accepting, reviewing, or rewriting Cypress code.
-5. Load `cypress-locator-extraction` skill before doing live-site locator discovery.
+2. Load [Manual test case conversion](./references/manual-test-case-conversion.md) when the input starts from a manual scenario, business flow, or test steps document.
+3. Load [Framework structure and conventions](./references/framework-structure.md) when you need ownership rules or expected project layout.
+4. Load [Clean code standards and examples](./references/clean-code-standards.md) before accepting, reviewing, or rewriting Cypress code.
+5. Load [Locator extraction workflow and script usage](./references/locator-extraction.md) before doing live-site locator discovery.
 6. Make the smallest change that fits the framework already in the repo.
 7. Validate with the narrowest useful command.
 
 ## Targeted Validation
 
 - Run the full headless suite: `npm test`
-- Run headless explicitly: `npm run cypress run --headless`
 - Open Cypress interactively: `npm run cy:open`
-- Run a single spec headless: `npx cypress run --headless --spec cypress/e2e/specs/<n>.cy.js`
+- Run a single spec: `npx cypress run --spec cypress/e2e/specs/<name>.cy.js`
 - Run an environment-specific spec with the project's script or explicit `--env` flags.
 - Pass an environment explicitly when the project uses env-driven routing or data.
 
 ## Practical Checks
 
-- If you add UI text assertions, confirm the matching locale-specific text values exist.
+- If you add UI text assertions, confirm the matching fixture text values exist.
 - If you add a new field interaction, update the page object and any command helper that should reuse it.
 - If you add DB-backed validation, confirm the task already exists in config or extend the existing task pattern.
 - If you add email coverage, keep subject and body validation localized and aligned with the project's email helper or page object layer.

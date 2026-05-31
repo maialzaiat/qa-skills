@@ -12,21 +12,22 @@ qa-skills/
 ├── README.md                              # This file
 │
 ├── agents/                                # GitHub Copilot agent definitions (VS Code)
+│   ├── cypress-automation.agent.md
 │   └── QA-Reviewer.agent.md
 │
 └── skills/                                # Shared skill definitions (VS Code / Claude Code / Cursor)
     ├── ai-rca-manager/
     │   └── SKILL.md
     ├── cypress-automation-framework/
-    │   └── SKILL.md
-    ├── cypress-clean-code-standards/
-    │   └── SKILL.md
-    ├── cypress-framework-structure/
-    │   └── SKILL.md
-    ├── cypress-locator-extraction/
-    │   └── SKILL.md
-    ├── cypress-manual-test-conversion/
-    │   └── SKILL.md
+    │   ├── SKILL.md
+    │   ├── references/
+    │   │   ├── clean-code-standards.md
+    │   │   ├── framework-structure.md
+    │   │   ├── locator-extraction.md
+    │   │   └── manual-test-case-conversion.md
+    │   └── scripts/
+    │       ├── extract-cypress-locators.cy.js
+    │       └── extract-cypress-locators.js
     ├── create-bug-to-jira/
     │   └── SKILL.md
     └── generate-test-cases-from-jira/
@@ -36,6 +37,16 @@ qa-skills/
 ---
 
 ## Agents
+
+### `Cypress Automation`
+
+**File:** [agents/cypress-automation.agent.md](agents/cypress-automation.agent.md)
+
+Cypress automation specialist agent. Handles converting manual test cases to Cypress automation, and adding, updating, reviewing, refactoring, or debugging Cypress specs, page objects, fixtures, custom commands, email checks, database tasks, and state-machine flows in an existing framework.
+
+**Triggers:** "manual test case to automation", "Cypress test", "page object", "fixture update", "support command", "flaky E2E", "email validation", "locator extraction", "automation framework cleanup".
+
+---
 
 ### `QA-Reviewer`
 
@@ -61,49 +72,16 @@ AI specialist in SRE and Lean Six Sigma Root Cause Analysis. Mines historical RC
 
 **File:** [skills/cypress-automation-framework/SKILL.md](skills/cypress-automation-framework/SKILL.md)
 
-Main Cypress framework skill. Use for adding, updating, reviewing, refactoring, or debugging anything in the Cypress framework — specs, page objects, fixtures, custom commands, email checks, database tasks, state-machine flows, and targeted Cypress runs.
+Consolidated Cypress framework skill. Covers the full automation lifecycle — converting manual test cases, adding/updating/refactoring specs, extending page objects, managing fixtures and support commands, live-site locator extraction, email/database validation, and clean code review. Bundles four internal references and the locator extraction script.
 
-**Triggers:** "Cypress test", "page object", "fixture update", "support command", "flaky E2E", "email validation", "locator extraction", "automation framework cleanup".
+| Reference | Purpose |
+|---|---|
+| [clean-code-standards.md](skills/cypress-automation-framework/references/clean-code-standards.md) | Code quality rules and examples for specs, POMs, commands, and fixtures |
+| [framework-structure.md](skills/cypress-automation-framework/references/framework-structure.md) | Folder layout, layer ownership, and naming conventions |
+| [locator-extraction.md](skills/cypress-automation-framework/references/locator-extraction.md) | Workflow and script usage for live-site selector discovery |
+| [manual-test-case-conversion.md](skills/cypress-automation-framework/references/manual-test-case-conversion.md) | Step-by-step process for converting manual test cases to Cypress automation |
 
----
-
-### `cypress-clean-code-standards`
-
-**File:** [skills/cypress-clean-code-standards/SKILL.md](skills/cypress-clean-code-standards/SKILL.md)
-
-Clean code standards and examples for the Cypress framework. Use when reviewing, writing, refactoring, or auditing Cypress code quality — specs, page objects, commands, and fixtures.
-
-**Triggers:** "is this good code", "review my Cypress test", "clean up this spec", "refactor page object".
-
----
-
-### `cypress-framework-structure`
-
-**File:** [skills/cypress-framework-structure/SKILL.md](skills/cypress-framework-structure/SKILL.md)
-
-Framework structure, conventions, and ownership rules. Use when deciding where to put new code, understanding the project layout, or determining which layer owns a selector or flow.
-
-**Triggers:** "where should I put this", "what folder does this go in", "how is the project structured", "framework conventions".
-
----
-
-### `cypress-locator-extraction`
-
-**File:** [skills/cypress-locator-extraction/SKILL.md](skills/cypress-locator-extraction/SKILL.md)
-
-Locator extraction workflow and script usage. Use when discovering, extracting, or validating CSS selectors from a live website for use in Cypress tests.
-
-**Triggers:** "find selectors for this page", "extract locators", "what selector should I use", "inspect this site", "run the locator script".
-
----
-
-### `cypress-manual-test-conversion`
-
-**File:** [skills/cypress-manual-test-conversion/SKILL.md](skills/cypress-manual-test-conversion/SKILL.md)
-
-Manual test case conversion workflow. Use when converting manual test cases, QA checklists, business scenarios, or step-by-step test documents into automated Cypress specs.
-
-**Triggers:** "convert this test case", "automate these steps", "turn this into a Cypress test", "here are my manual test steps".
+**Triggers:** "Cypress test", "page object", "fixture update", "support command", "flaky E2E", "email validation", "locator extraction", "automation framework cleanup", "convert this test case", "automate these steps", "is this good code", "where should I put this".
 
 ---
 
